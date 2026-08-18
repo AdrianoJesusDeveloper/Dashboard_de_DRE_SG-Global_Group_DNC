@@ -4,7 +4,7 @@
 
 ### **Inteligência Financeira para Decisão**
 
-**Brasil 🇧🇷 · EUA 🇺🇸**
+**Brasil** · **EUA**
 
 Transformando dados financeiros brutos em indicadores claros, comparáveis e acionáveis.
 
@@ -32,12 +32,14 @@ A aplicação combina **ETL, tratamento de dados, regras de negócio, indicadore
 
 > **Objetivo:** reduzir a distância entre o dado bruto e a decisão gerencial.
 
-### 🌎 Mercados oficiais da interface
+### Mercados oficiais da interface
 
 | Mercado | Moeda | Uso na análise |
 |:---:|:---:|:---|
-| 🇧🇷 **Brasil** | **R$** | Operação brasileira |
-| 🇺🇸 **EUA** | **US$** | Operação americana |
+| **Brasil** | **R$** | Operação brasileira |
+| **EUA** | **US$** | Operação americana |
+
+**Nomenclatura oficial:** em toda a interface e documentação do projeto, os mercados devem ser apresentados exclusivamente como **Brasil** e **EUA**.
 
 **Importante:** a aplicação preserva as moedas originais. Não existe conversão cambial automática. Por isso, comparações entre os mercados priorizam **margens, crescimento e indicadores relativos**, evitando comparar valores nominais em moedas diferentes como se fossem equivalentes.
 
@@ -95,7 +97,7 @@ A arquitetura foi pensada para representar o fluxo completo de uma solução ana
                   │
        ┌──────────┴──────────┐
        │                     │
-   🇧🇷 Brasil             🇺🇸 EUA
+     Brasil                  EUA
        │                     │
        └──────────┬──────────┘
                   ▼
@@ -126,10 +128,10 @@ Essa abordagem demonstra competências em **Python, Pandas, ETL, análise financ
 
 ```mermaid
 flowchart TB
-    BR["🇧🇷 DRE Brasil\nDRE_BR_DNC.xlsx"]
-    US["🇺🇸 DRE EUA\nDRE_US_DNC.xlsx"]
-    CBR["🇧🇷 Caixa Brasil"]
-    CUS["🇺🇸 Caixa EUA"]
+    BR["DRE Brasil\nDRE_BR_DNC.xlsx"]
+    US["DRE EUA\nDRE_US_DNC.xlsx"]
+    CBR["Caixa Brasil"]
+    CUS["Caixa EUA"]
 
     ETL["🧹 ETL & Data Preparation\netl.py"]
     CFG["⚙️ Configuration\nconfig.py"]
@@ -171,12 +173,12 @@ Responsável por:
 
 Mantém a identidade dos mercados em um único ponto:
 
-```python
+```text
 Brasil → BR → R$
 EUA    → US → US$
 ```
 
-A nomenclatura oficial exibida ao usuário é **Brasil** e **EUA**.
+**Brasil** e **EUA** são os únicos nomes de mercado exibidos na interface.
 
 #### `app.py` · Experiência analítica
 
@@ -263,7 +265,7 @@ O processo realiza:
 
 | Situação | Tratamento |
 |---|---|
-| 🇧🇷 Caixa Brasil sem movimentação suficiente | Burn Rate e Runway não são tratados como indicadores confiáveis |
+| Caixa Brasil sem movimentação suficiente | Burn Rate e Runway não são tratados como indicadores confiáveis |
 | Squad sem variação significativa | Não gerar conclusões artificiais por equipe |
 | Orçado sem dados suficientes | Comparação Orçado × Realizado permanece limitada |
 | Despesas possivelmente incompletas | Margens elevadas devem ser interpretadas com cautela |
@@ -277,7 +279,7 @@ A experiência visual segue uma abordagem **executiva, limpa e orientada à leit
 
 - hierarquia visual clara;
 - KPIs destacados antes dos gráficos;
-- Brasil e EUA apresentados de forma consistente;
+- **Brasil** e **EUA** apresentados de forma consistente;
 - cores utilizadas com função semântica;
 - gráficos com leitura objetiva;
 - filtros acessíveis;
