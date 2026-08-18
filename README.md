@@ -9,7 +9,7 @@
 [![Pandas](https://img.shields.io/badge/Pandas-dados-0F0F24?style=for-the-badge&logo=pandas&logoColor=FF4800)](https://pandas.pydata.org/)
 [![Status](https://img.shields.io/badge/status-em%20desenvolvimento-888888?style=for-the-badge)]()
 
-**Leitura consolidada da DRE da SG Global Group — Brasil 🇧🇷 e EUA 🇺🇸, lado a lado, em um único dashboard.**
+**Dashboard financeiro para análise consolidada da DRE da SG Global Group — Brasil e EUA.**
 
 Projeto I · Escola de Dados · DNC
 
@@ -20,13 +20,14 @@ Projeto I · Escola de Dados · DNC
 ## 📑 Sumário
 
 - [Sobre o projeto](#-sobre-o-projeto)
+- [Evolução da versão atual](#-evolução-da-versão-atual)
 - [Prévia do dashboard](#-prévia-do-dashboard)
 - [Funcionalidades](#-funcionalidades)
-- [Como os dados fluem](#-como-os-dados-fluem)
+- [Arquitetura e fluxo dos dados](#-arquitetura-e-fluxo-dos-dados)
 - [Estrutura do repositório](#-estrutura-do-repositório)
 - [Como rodar](#-como-rodar)
-- [Indicadores calculados](#-indicadores-calculados)
-- [Limitações conhecidas dos dados](#-limitações-conhecidas-dos-dados)
+- [Indicadores e premissas](#-indicadores-e-premissas)
+- [Qualidade e limitações dos dados](#-qualidade-e-limitações-dos-dados)
 - [Roadmap](#-roadmap)
 - [Autoria](#-autoria)
 
@@ -34,23 +35,50 @@ Projeto I · Escola de Dados · DNC
 
 ## 📊 Sobre o projeto
 
-A **SG Global Group** é uma agência de imigração fundada em 2014, referência na América Latina, com mais de 5.000 famílias brasileiras assessoradas. Este projeto nasceu de uma dor concreta: os dados financeiros da empresa existem, mas ficam dispersos em **~50 mil lançamentos** espalhados por duas planilhas (Brasil e EUA), sem uma leitura consolidada para a Diretoria.
+A **SG Global Group** é uma agência de imigração fundada em 2014. Este projeto nasceu de um desafio de dados: transformar lançamentos financeiros distribuídos em duas bases — **Brasil** e **EUA** — em uma visão executiva que facilite a leitura da Demonstração do Resultado do Exercício (DRE) e do fluxo de caixa.
 
-Este dashboard resolve isso: **limpa, padroniza e visualiza** a Demonstração do Resultado do Exercício (DRE) das duas operações, lado a lado, em suas moedas originais — sem precisar abrir uma única planilha.
+O dashboard realiza o processo de **limpeza, padronização, cálculo dos indicadores e visualização** usando Python, pandas, Plotly e Streamlit.
 
-> 💡 Construído com **Python (pandas)** para o tratamento dos dados e **Streamlit** para a interface — sem depender de ferramentas de BI proprietárias.
+A solução preserva as moedas originais de cada operação:
+
+- **Brasil** → R$
+- **EUA** → US$
+
+Não há conversão cambial automática. Portanto, valores nominais de Brasil e EUA não são comparados diretamente como se estivessem na mesma moeda; a comparação executiva prioriza indicadores relativos, como margens e desempenho operacional.
+
+> 💡 O projeto foi desenvolvido com foco em transformar dados brutos em informação útil para decisão, mantendo explícitas as premissas e limitações da base.
+
+<br/>
+
+## 🔄 Evolução da versão atual
+
+A versão de refinamento `feature/refinamento-dre-v3` introduz uma camada mais organizada para a análise financeira e para a apresentação dos mercados.
+
+### Principais melhorias
+
+- **Padronização dos mercados:** a interface utiliza somente **Brasil** e **EUA**.
+- **Configuração centralizada:** país, código, moeda e elementos de apresentação ficam concentrados em `config.py`.
+- **KPIs financeiros revisados:** separação entre Receita Bruta, Devoluções, Receita Líquida, Custos, Despesas, Resultado Operacional e Resultado Líquido.
+- **Margens mais claras:** Margem Operacional e Margem Líquida passam a ser tratadas separadamente.
+- **EBITDA identificado como proxy:** a base não possui detalhamento suficiente para um EBITDA contábil estrito.
+- **Comparação internacional mais responsável:** Brasil e EUA são mantidos em suas moedas originais e indicadores relativos são priorizados para comparação.
+- **ETL separado da apresentação:** o tratamento e as regras de negócio permanecem concentrados em `etl.py`, enquanto `app.py` cuida da interface.
+- **Cache de dados:** carregamentos das bases são armazenados em cache pelo Streamlit para reduzir processamento repetitivo.
+- **Responsividade:** a interface possui ajustes específicos para telas menores.
+
+> A branch de refinamento preserva a `main` durante a evolução do projeto, permitindo validar as alterações antes da consolidação da versão principal.
 
 <br/>
 
 ## 🖼 Prévia do dashboard
 
 <details open>
-<summary><strong>Visão Geral</strong> — KPIs, evolução mensal e detalhamento, Brasil e EUA lado a lado</summary>
+<summary><strong>Visão Geral</strong> — indicadores executivos para Brasil e EUA</summary>
 <br/>
 
 <img src="docs/screenshots/visao_geral_mockup.png" alt="Prévia da Visão Geral do dashboard" width="100%" />
 
-<sub>⚠️ Esta imagem é um <strong>mock-up gerado a partir dos dados reais e dos mesmos cálculos do dashboard</strong> — não é um print literal da tela do Streamlit. Depois de rodar o app na sua máquina (veja <a href="#-como-rodar">Como rodar</a>), você pode substituir esta imagem por um print real em <code>docs/screenshots/</code>.</sub>
+<sub>⚠️ A imagem acima é um mock-up baseado nos dados e cálculos do projeto. Pode ser substituída posteriormente por uma captura real da aplicação.</sub>
 
 </details>
 
@@ -91,195 +119,270 @@ Este dashboard resolve isso: **limpa, padroniza e visualiza** a Demonstração d
 </tr>
 </table>
 
-<details>
-<summary>💵 Ver também: <strong>Fluxo de Caixa Mensal (EUA)</strong></summary>
-<br/>
-
-<img src="docs/screenshots/fluxo_caixa_eua.png" alt="Fluxo de Caixa Mensal EUA" width="100%" />
-
-<sub>O Brasil não aparece aqui porque a aba <code>Caixa mensal</code> dessa base não tem movimentação real registrada — ver <a href="#-limitações-conhecidas-dos-dados">Limitações conhecidas dos dados</a>.</sub>
-
-</details>
-
 <br/>
 
 ## ✨ Funcionalidades
 
 | | |
 |---|---|
-| 🌎 **Brasil + EUA lado a lado** | Duas bases, duas moedas (R$ / US$), sem conversão forçada — comparação estrutural, não nominal |
-| 💰 **KPIs de DRE** | Receita, Custos, Despesas, Impostos, Resultado Operacional e Margem |
-| 📈 **Indicadores avançados** | Receita Bruta/Líquida, Margem de Contribuição, EBITDA (aproximado), Margem Líquida |
-| 🏦 **Fluxo de Caixa** | Saldo Atual, Burn Rate médio e Runway, com gráfico de Entradas x Saídas x Saldo |
-| 🧭 **Filtros dinâmicos** | Empresa e período de competência, aplicados a todos os gráficos ao mesmo tempo |
-| 🔍 **Detalhamento** | Tabela navegável por Grupo DRE e Categoria |
-| ⚠️ **Transparência de dados** | O app avisa quando um indicador não pode ser calculado com confiança, em vez de mostrar número inventado |
+| 🌎 **Brasil e EUA** | Operações analisadas lado a lado, cada uma em sua moeda original |
+| 💰 **DRE** | Receita Bruta, Devoluções, Receita Líquida, Custos, Despesas, Impostos e resultados |
+| 📈 **Performance** | Evolução mensal, Margem Operacional, Margem Líquida e Margem de Contribuição |
+| 🧮 **EBITDA proxy** | Indicador operacional aproximado, explicitamente identificado como proxy |
+| 🏦 **Fluxo de Caixa** | Entradas, Saídas, Net Cash, Saldo, Burn Rate e Runway quando há movimentação real |
+| 🧭 **Filtros dinâmicos** | Empresas e período de competência |
+| 🔎 **Detalhamento** | Exploração dos lançamentos por grupo, categoria e demais dimensões disponíveis |
+| ⚠️ **Transparência** | Indicadores dependentes de dados ausentes ou insuficientes são sinalizados em vez de inventados |
+| 📱 **Responsividade** | Layout adaptado para diferentes larguras de tela |
 
 <br/>
 
-## 🔄 Como os dados fluem
+## 🏗 Arquitetura e fluxo dos dados
 
 ```mermaid
 flowchart LR
-    A["📂 DRE_BR_DNC.xlsx\naba Base"] --> C["🧹 etl.py\nclean_base()"]
-    B["📂 DRE_US_DNC.xlsx\naba Base"] --> C
-    A2["📂 Caixa mensal\n(BR e US)"] --> C2["🧹 etl.py\nclean_caixa()"]
-    B2["📂 Caixa mensal"] --> C2
+    A["📂 DRE Brasil\nDRE_BR_DNC.xlsx"] --> C["🧹 etl.py\nETL e padronização"]
+    B["📂 DRE EUA\nDRE_US_DNC.xlsx"] --> C
+    A2["📂 Caixa mensal\nBrasil"] --> C2["🧹 etl.py\nFluxo de caixa"]
+    B2["📂 Caixa mensal\nEUA"] --> C2
 
-    C --> D["Grupo DRE padronizado\n+ colunas de tempo"]
-    C2 --> D2["Série mensal de\nEntradas / Saídas / Saldo"]
+    C --> D["Modelo analítico\nGrupo DRE + métricas"]
+    C2 --> D2["Séries mensais\nEntradas + Saídas + Saldo"]
 
-    D --> E["📊 app.py (Streamlit)"]
+    D --> E["📊 app.py\nStreamlit"]
     D2 --> E
+    F["⚙️ config.py\nBrasil / EUA / moedas"] --> E
 
-    E --> F1["Visão Geral"]
-    E --> F2["Indicadores de DRE"]
-    E --> F3["Fluxo de Caixa"]
-    E --> F4["Evolução Mensal"]
-    E --> F5["Composição de Custos"]
-    E --> F6["Detalhamento"]
-
-    style A fill:#0F0F24,color:#fff
-    style B fill:#0F0F24,color:#fff
-    style A2 fill:#0F0F24,color:#fff
-    style B2 fill:#0F0F24,color:#fff
-    style E fill:#FF4800,color:#fff
+    E --> G1["Visão Geral"]
+    E --> G2["DRE & Performance"]
+    E --> G3["Fluxo de Caixa"]
+    E --> G4["Detalhamento"]
 ```
 
-<sub>Diagrama renderizado automaticamente pelo GitHub (Mermaid). Se estiver lendo isso fora do GitHub, ele aparece como texto — abra o repositório no navegador para ver o fluxo visual.</sub>
+### Camadas principais
+
+**`etl.py` — Dados e regras de negócio**
+
+Responsável por:
+
+- leitura das planilhas;
+- seleção das colunas necessárias;
+- limpeza de datas e valores;
+- padronização das classificações;
+- criação do `Grupo DRE`;
+- criação das dimensões temporais;
+- cálculo dos KPIs;
+- preparação do fluxo de caixa.
+
+**`config.py` — Configuração de apresentação**
+
+Centraliza os mercados e suas propriedades:
+
+```text
+Brasil → BR → R$
+EUA    → US → US$
+```
+
+A interface utiliza os nomes de apresentação **Brasil** e **EUA**.
+
+**`app.py` — Camada de apresentação**
+
+Responsável por:
+
+- interface Streamlit;
+- filtros;
+- cards de indicadores;
+- gráficos Plotly;
+- mensagens executivas;
+- navegação entre as áreas do dashboard.
 
 <br/>
 
 ## 🗂 Estrutura do repositório
 
-```
+```text
 dre_dashboard/
-├── app.py                      # Aplicativo Streamlit — a interface do dashboard
-├── etl.py                      # Limpeza, padronização e cálculo dos indicadores
-├── gerar_graficos.py           # Script auxiliar para exportar gráficos estáticos (PNG)
-├── requirements.txt            # Dependências do projeto
-├── README.md                   # Este arquivo
+├── app.py                      # Interface Streamlit
+├── etl.py                      # ETL, padronização e métricas
+├── config.py                   # Configuração de Brasil, EUA e moedas
+├── gerar_graficos.py           # Script auxiliar para gráficos estáticos
+├── requirements.txt            # Dependências
+├── README.md                   # Documentação
 ├── data/
 │   ├── DRE_BR_DNC.xlsx
 │   └── DRE_US_DNC.xlsx
 └── docs/
-    └── screenshots/            # Imagens usadas neste README
+    └── screenshots/            # Imagens usadas na documentação
 ```
 
 <br/>
 
 ## 🚀 Como rodar
 
-<details open>
-<summary><strong>1. Pré-requisitos</strong></summary>
-<br/>
+### 1. Pré-requisitos
 
-- Python 3.10 ou superior instalado
-- Terminal (cmd, PowerShell ou bash)
+- Python 3.10 ou superior
+- Git
+- Terminal (PowerShell, cmd ou bash)
 
-</details>
-
-<details open>
-<summary><strong>2. Instalação</strong></summary>
-<br/>
+### 2. Clonar o projeto
 
 ```bash
-# Entre na pasta do projeto
-cd dre_dashboard
+git clone https://github.com/AdrianoJesusDeveloper/Dashboard_de_DRE_SG-Global_Group_DNC.git
+cd Dashboard_de_DRE_SG-Global_Group_DNC
+```
 
-# Crie um ambiente virtual (recomendado)
+### 3. Criar ambiente virtual
+
+```bash
 python -m venv venv
+```
 
-# Ative o ambiente virtual
-# Windows:
+No Windows:
+
+```bash
 venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
+```
 
-# Instale as dependências
+No macOS/Linux:
+
+```bash
+source venv/bin/activate
+```
+
+### 4. Instalar dependências
+
+```bash
 pip install -r requirements.txt
 ```
 
-</details>
-
-<details open>
-<summary><strong>3. Execução</strong></summary>
-<br/>
+### 5. Executar
 
 ```bash
 streamlit run app.py
 ```
 
-O navegador abre automaticamente em **http://localhost:8501**. Na barra lateral, deixe selecionado **"Usar arquivos padrão (./data)"** — os arquivos já estão na pasta `data/`.
+A aplicação será disponibilizada normalmente em `http://localhost:8501`.
 
-</details>
+Na execução padrão, o dashboard utiliza:
 
-<details>
-<summary><strong>Problemas comuns</strong> (clique para expandir)</summary>
+```text
+data/DRE_BR_DNC.xlsx
+data/DRE_US_DNC.xlsx
+```
+
+Também é possível utilizar o modo de envio manual de arquivos pela interface.
+
 <br/>
 
-| Sintoma | Provável causa | Solução |
+## 🧮 Indicadores e premissas
+
+| Indicador | Definição | Observação |
 |---|---|---|
-| `streamlit: command not found` | Ambiente virtual não ativado ou dependências não instaladas | Repita o passo 2, confirme que o `venv` está ativo (aparece `(venv)` no terminal) |
-| Página em branco / erro ao carregar dados | Arquivos `.xlsx` não estão em `data/` | Confirme que `DRE_BR_DNC.xlsx` e `DRE_US_DNC.xlsx` estão dentro de `dre_dashboard/data/` |
-| Gráficos não aparecem | Versão do `plotly` desatualizada | `pip install --upgrade plotly` |
-
-</details>
-
-<br/>
-
-## 🧮 Indicadores calculados
-
-<details>
-<summary><strong>Ver fórmulas e definições</strong> (clique para expandir)</summary>
-<br/>
-
-| Indicador | Fórmula | Observação |
-|---|---|---|
-| Receita Bruta | Σ Valor recebido classificado como "Receita" | — |
-| Receita Líquida | Receita Bruta − Devoluções | Devoluções só existem na base US |
+| Receita Bruta | Soma de `Valor recebido` classificado como Receita | Base original |
+| Devoluções | Soma de valores classificados como Devolução | Tratadas separadamente quando disponíveis |
+| Receita Líquida | Receita Bruta − Devoluções | Depende da existência de devoluções na base |
+| Custos | Custos Variáveis + Custos Fixos | Valores pagos |
+| Despesas | Despesas Fixas + Despesas Variáveis | Valores pagos |
+| Resultado Operacional | Receita Líquida − Custos − Despesas | Antes dos impostos |
+| Resultado Líquido | Resultado Operacional − Impostos | Conforme as categorias disponíveis |
+| Margem Operacional | Resultado Operacional / Receita Líquida | Indicador relativo para comparação |
 | Margem de Contribuição | (Receita Líquida − Custos Variáveis) / Receita Líquida | — |
-| EBITDA (aproximado) | Receita Líquida − Custos Variáveis − Custos Fixos − Despesas | Proxy operacional; a Base não separa depreciação/amortização |
-| Resultado Operacional | Receita − Custos − Despesas − Impostos | — |
-| Margem Líquida | Resultado Líquido / Receita Líquida | — |
-| Net Cash (mensal) | Entradas − Saídas | Aba `Caixa mensal` |
-| Burn Rate médio | Média do \|Net Cash\| nos meses em que ele foi negativo | Só calculado quando há movimentação real |
-| Runway | Saldo Atual / Burn Rate médio | Em meses |
+| EBITDA (proxy) | Receita Líquida − Custos − Despesas | Não é EBITDA contábil estrito |
+| Net Cash | Entradas − Saídas | Aba `Caixa mensal` |
+| Burn Rate médio | Média do valor negativo de Net Cash nos meses de queima | Só calculado quando existe movimentação |
+| Runway | Saldo Atual / Burn Rate médio | Estimativa em meses |
 
-</details>
+### ⚠️ Por que o EBITDA é um proxy?
+
+A base fornecida não apresenta, de forma separada e confiável, todas as informações necessárias para um EBITDA contábil estrito, especialmente depreciação e amortização.
+
+Por isso, o dashboard utiliza a expressão **EBITDA (proxy)** e documenta a premissa, evitando apresentar uma estimativa operacional como se fosse um indicador contábil auditado.
 
 <br/>
 
-## ⚠️ Limitações conhecidas dos dados
+## 🔍 Qualidade e limitações dos dados
 
-Nem tudo que os dados sugerem à primeira vista é confiável — parte do valor deste projeto foi *identificar* isso, não escondê-lo:
+Uma parte importante do projeto é identificar limitações da fonte antes de gerar indicadores.
 
-- **Colunas calculadas da planilha original** (`Valor Original Ajustado`, `Atrasado` etc.) retornam erro de fórmula em parte das linhas — não são usadas; tudo é recalculado a partir dos dados brutos.
-- **`Caixa mensal` do Brasil não tem Entradas/Saídas reais** — fica zerada em 100% das linhas, só repetindo um saldo estático. Burn Rate e Runway só existem para os EUA.
-- **A coluna `Squad`** só contém um único valor fixo em todas as linhas — não permite segmentação real por equipe/projeto.
-- **A coluna `Orçado`** só contém `"Realizado"`, em ambas as abas — não há comparação Orçado x Realizado disponível nos dados fornecidos.
-- **Margem operacional muito alta** em ambas as bases (Brasil ~86%, EUA ~67%) — possível indício de que despesas como folha de pagamento não estão totalmente capturadas nesta base.
+### Tratamento realizado
+
+- Colunas calculadas problemáticas da planilha original não são utilizadas quando podem ser recalculadas a partir dos dados brutos.
+- Datas são convertidas com tratamento de valores inválidos.
+- Valores financeiros são convertidos para numérico, tratando erros residuais.
+- Classificações diferentes entre as bases são agrupadas em uma taxonomia comum de DRE.
+- Dados são preparados para análise mensal por meio de `Ano`, `Mes` e `AnoMes`.
+
+### Limitações conhecidas
+
+- **Caixa do Brasil:** a aba `Caixa mensal` não apresenta movimentação real suficiente para sustentar Burn Rate e Runway.
+- **Squad:** a coluna disponível não possui variação suficiente para uma análise confiável por equipe.
+- **Orçado:** a base fornecida não disponibiliza dados suficientes para uma comparação completa entre Orçado e Realizado.
+- **Despesas:** margens muito elevadas podem indicar que determinadas despesas operacionais não estão completamente representadas na fonte.
+- **Moedas:** Brasil e EUA permanecem em R$ e US$. Não há conversão cambial automática.
+
+> **Princípio do projeto:** quando a base não suporta uma conclusão confiável, o dashboard deve sinalizar a limitação em vez de criar uma falsa precisão.
 
 <br/>
 
 ## 🛣 Roadmap
 
-- [x] Limpeza e padronização das bases BR e US
-- [x] KPIs principais de DRE (Receita, Custos, Despesas, Resultado, Margem)
-- [x] Indicadores avançados (EBITDA aprox., Margem de Contribuição)
-- [x] Módulo de Fluxo de Caixa
-- [ ] Comparação Orçado x Realizado (pendente de fonte de dados)
-- [ ] Segmentação real por Squad/equipe (pendente de dados da empresa)
-- [ ] Publicação no Streamlit Community Cloud
-- [ ] Autenticação simples para acesso restrito da equipe
+### Concluído
+
+- [x] Limpeza e padronização das bases Brasil e EUA
+- [x] Taxonomia comum de grupos da DRE
+- [x] KPIs principais
+- [x] Receita Bruta e Receita Líquida
+- [x] Margem Operacional e Margem Líquida
+- [x] Margem de Contribuição
+- [x] EBITDA identificado como proxy
+- [x] Fluxo de Caixa
+- [x] Filtros por empresa e período
+- [x] Padronização da apresentação como **Brasil** e **EUA**
+- [x] Configuração centralizada em `config.py`
+- [x] Melhorias de responsividade
+
+### Próximas etapas
+
+- [ ] Criar testes automatizados para as métricas financeiras
+- [ ] Criar camada formal de Data Quality
+- [ ] Melhorar filtros e seleção de períodos
+- [ ] Refinar UX mobile
+- [ ] Comparação Orçado x Realizado quando houver dados confiáveis
+- [ ] Segmentação por Squad quando houver dados confiáveis
+- [ ] Deploy público no Streamlit Community Cloud
+- [ ] Autenticação para acesso restrito
+
+<br/>
+
+## 🎯 Objetivo profissional do projeto
+
+Além de atender ao desafio da DNC, este projeto representa uma aplicação prática de competências de:
+
+- **Python**
+- **Pandas**
+- **ETL**
+- **Análise exploratória de dados**
+- **Indicadores financeiros**
+- **Visualização de dados**
+- **Streamlit**
+- **Plotly**
+- **Qualidade de dados**
+- **Pensamento analítico orientado à decisão**
+
+A proposta é demonstrar não apenas a capacidade de criar gráficos, mas o processo completo de **transformar dados brutos em informação confiável para tomada de decisão**.
 
 <br/>
 
 ## 👤 Autoria
 
-**Adriano Jesus da Costa**
+**Adriano Jesus da Costa**  
 Projeto I — Escola de Dados — DNC
 
-<sub>Construído com Python, pandas e Streamlit.</sub>
+[![GitHub](https://img.shields.io/badge/GitHub-AdrianoJesusDeveloper-181717?style=for-the-badge&logo=github)](https://github.com/AdrianoJesusDeveloper)
+
+<br/>
+
+<sub>Construído com Python, pandas, Plotly e Streamlit.</sub>
 
 </div>
