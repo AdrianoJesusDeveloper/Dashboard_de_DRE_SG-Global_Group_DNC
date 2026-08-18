@@ -1,5 +1,9 @@
 <div align="center">
 
+<img src="docs/screenshots/banner.png" alt="Dashboard DRE — SG Global Group" width="100%" />
+
+<br/>
+
 # 📊 Dashboard DRE · SG Global Group
 
 ### **Inteligência Financeira para Decisão**
@@ -8,7 +12,7 @@
 
 Transformando dados financeiros brutos em indicadores claros, comparáveis e acionáveis.
 
-<br>
+<br/>
 
 [![Python](https://img.shields.io/badge/Python-3.10+-111827?style=for-the-badge&logo=python&logoColor=3776AB)](https://www.python.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-111827?style=for-the-badge&logo=pandas&logoColor=150458)](https://pandas.pydata.org/)
@@ -16,7 +20,7 @@ Transformando dados financeiros brutos em indicadores claros, comparáveis e aci
 [![Plotly](https://img.shields.io/badge/Plotly-Visualization-111827?style=for-the-badge&logo=plotly&logoColor=3F4F75)](https://plotly.com/python/)
 [![Status](https://img.shields.io/badge/Status-Em%20desenvolvimento-F59E0B?style=for-the-badge)]()
 
-<br>
+<br/>
 
 **Projeto I · Escola de Dados · DNC**
 
@@ -45,52 +49,84 @@ A aplicação combina **ETL, tratamento de dados, regras de negócio, indicadore
 
 ---
 
-## ✨ O que o dashboard entrega
+## 🖼 Prévia do dashboard
 
-### 💰 DRE & Performance
+<details open>
+<summary><strong>Visão Geral</strong> — KPIs, evolução mensal e detalhamento, Brasil e EUA lado a lado</summary>
+<br/>
 
-- Receita Bruta
-- Devoluções
-- Receita Líquida
-- Custos Variáveis
-- Custos Fixos
-- Despesas Fixas
-- Despesas Variáveis
-- Impostos
-- Resultado Operacional
-- Resultado Líquido
-- Margem Operacional
-- Margem Líquida
-- Margem de Contribuição
-- **EBITDA (proxy)**
+<img src="docs/screenshots/visao_geral_mockup.png" alt="Prévia da Visão Geral do dashboard" width="100%" />
 
-### 🏦 Fluxo de Caixa
+<sub>⚠️ Esta imagem é um <strong>mock-up gerado a partir dos dados reais e dos mesmos cálculos do dashboard</strong> — não é um print literal da tela do Streamlit.</sub>
 
-- Entradas
-- Saídas
-- Net Cash
-- Saldo Final
-- Burn Rate médio
-- Runway estimado
-- Evolução mensal do caixa
+</details>
 
-### 🔎 Exploração analítica
+<br/>
 
-- Filtro por empresa
-- Filtro por período
-- Evolução mensal
-- Composição de custos e despesas
-- Detalhamento dos lançamentos
-- Insights executivos
-- Interface responsiva
+<table>
+<tr>
+<td width="50%">
+
+**Evolução Mensal — Brasil**
+
+<img src="docs/screenshots/evolucao_brasil.png" alt="Evolução Mensal — Brasil" width="100%" />
+
+</td>
+<td width="50%">
+
+**Evolução Mensal — EUA**
+
+<img src="docs/screenshots/evolucao_eua.png" alt="Evolução Mensal — EUA" width="100%" />
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Composição de Custos — Brasil**
+
+<img src="docs/screenshots/composicao_brasil.png" alt="Composição de Custos — Brasil" width="100%" />
+
+</td>
+<td width="50%">
+
+**Composição de Custos — EUA**
+
+<img src="docs/screenshots/composicao_eua.png" alt="Composição de Custos — EUA" width="100%" />
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary>💵 Ver também: <strong>Fluxo de Caixa Mensal — EUA</strong></summary>
+<br/>
+
+<img src="docs/screenshots/fluxo_caixa_eua.png" alt="Fluxo de Caixa Mensal — EUA" width="100%" />
+
+<sub>O Brasil não aparece aqui porque a aba <code>Caixa mensal</code> dessa base não tem movimentação real registrada.</sub>
+
+</details>
+
+<br/>
+
+## ✨ Funcionalidades
+
+| | |
+|---|---|
+| 🌎 **Brasil + EUA lado a lado** | Duas bases, duas moedas (R$ / US$), sem conversão forçada — comparação estrutural, não nominal |
+| 💰 **KPIs de DRE** | Receita, Custos, Despesas, Impostos, Resultado Operacional e Margem |
+| 📈 **Indicadores avançados** | Receita Bruta/Líquida, Margem de Contribuição, EBITDA (proxy), Margem Líquida |
+| 🏦 **Fluxo de Caixa** | Saldo Atual, Burn Rate médio e Runway, com gráfico de Entradas × Saídas × Saldo |
+| 🧭 **Filtros dinâmicos** | Empresa e período de competência, aplicados aos gráficos |
+| 🔍 **Detalhamento** | Tabela navegável por Grupo DRE e Categoria |
+| ⚠️ **Transparência de dados** | O app sinaliza quando um indicador não pode ser calculado com confiança |
 
 ---
 
 ## 🧠 Diferencial técnico
 
-Este projeto não foi construído apenas para **"mostrar gráficos"**.
-
-A arquitetura foi pensada para representar o fluxo completo de uma solução analítica:
+Este projeto não foi construído apenas para **"mostrar gráficos"**. A arquitetura representa o ciclo completo de uma solução analítica:
 
 ```text
              DADOS BRUTOS
@@ -120,8 +156,6 @@ A arquitetura foi pensada para representar o fluxo completo de uma solução ana
           🎯 DECISÃO GERENCIAL
 ```
 
-Essa abordagem demonstra competências em **Python, Pandas, ETL, análise financeira, visualização e pensamento orientado à decisão**.
-
 ---
 
 ## 🏗 Arquitetura
@@ -132,13 +166,11 @@ flowchart TB
     US["DRE EUA\nDRE_US_DNC.xlsx"]
     CBR["Caixa Brasil"]
     CUS["Caixa EUA"]
-
     ETL["🧹 ETL & Data Preparation\netl.py"]
     CFG["⚙️ Configuration\nconfig.py"]
     MODEL["🧩 Modelo Analítico\nDRE + Caixa + Dimensões"]
     KPI["🧮 Business Metrics\nKPIs + Margens + Indicadores"]
     APP["📊 Streamlit App\napp.py"]
-
     BR --> ETL
     US --> ETL
     CBR --> ETL
@@ -147,7 +179,6 @@ flowchart TB
     MODEL --> KPI
     CFG --> APP
     KPI --> APP
-
     APP --> V1["Visão Geral"]
     APP --> V2["DRE & Performance"]
     APP --> V3["Fluxo de Caixa"]
@@ -158,16 +189,7 @@ flowchart TB
 
 #### `etl.py` · Dados & regras de negócio
 
-Responsável por:
-
-- leitura das planilhas;
-- seleção das colunas relevantes;
-- limpeza de datas e valores;
-- padronização das classificações;
-- criação do `Grupo DRE`;
-- criação das dimensões temporais;
-- cálculo dos KPIs;
-- preparação das séries de fluxo de caixa.
+Responsável por leitura, limpeza, padronização, taxonomia DRE, dimensões temporais, KPIs e preparação do fluxo de caixa.
 
 #### `config.py` · Configuração central
 
@@ -182,16 +204,7 @@ EUA    → US → US$
 
 #### `app.py` · Experiência analítica
 
-Responsável por:
-
-- interface Streamlit;
-- filtros;
-- cards executivos;
-- gráficos Plotly;
-- indicadores;
-- insights;
-- navegação;
-- responsividade.
+Responsável pela interface Streamlit, filtros, cards executivos, gráficos Plotly, indicadores, insights, navegação e responsividade.
 
 ---
 
@@ -248,18 +261,7 @@ Por isso, o dashboard utiliza deliberadamente a nomenclatura **EBITDA (proxy)**.
 
 ## 🧹 Qualidade dos dados
 
-A etapa de preparação não depende cegamente das fórmulas existentes nas planilhas.
-
-O processo realiza:
-
-- seleção das colunas necessárias;
-- tratamento de datas inválidas;
-- conversão dos valores financeiros para numérico;
-- tratamento de valores ausentes;
-- padronização de classificações;
-- criação de uma taxonomia comum para Brasil e EUA;
-- geração das dimensões `Ano`, `Mes` e `AnoMes`;
-- identificação de ausência de movimentação real no caixa.
+O processo realiza seleção das colunas necessárias, tratamento de datas inválidas, conversão de valores financeiros, tratamento de ausências, padronização das classificações, taxonomia comum para Brasil e EUA, dimensões temporais e identificação de ausência de movimentação real no caixa.
 
 ### Limitações conhecidas
 
@@ -327,11 +329,7 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-A aplicação será disponibilizada normalmente em:
-
-```text
-http://localhost:8501
-```
+A aplicação será disponibilizada normalmente em `http://localhost:8501`.
 
 ### 📂 Bases padrão
 
@@ -378,8 +376,6 @@ A aplicação também possui suporte ao envio manual das bases pela interface.
 ## 💼 Competências demonstradas
 
 **Python · Pandas · ETL · Data Analysis · Business Intelligence · Financial Analytics · Plotly · Streamlit · Data Quality · Git/GitHub**
-
-O projeto demonstra o ciclo completo de uma solução analítica:
 
 > **Extrair → Limpar → Padronizar → Modelar → Calcular → Visualizar → Interpretar → Decidir**
 
